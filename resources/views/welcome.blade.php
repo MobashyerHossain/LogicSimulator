@@ -43,9 +43,6 @@
             height: height,
         });
 
-        var tempLayer = new Konva.Layer();
-        stage.add(tempLayer);
-
         @include('js.gridJS')
 
         var layer = new Konva.Layer();
@@ -111,33 +108,15 @@
                 document.body.style.cursor = 'grab';
             });
 
-            b.on('click', function (evt) {
-              var shape = evt.target;
-              alert('you clicked on \"' + shape.getName() + '\"');
-            });
-
             layer.add(b);
             layer.draw();
         });
-
-        stage.on("dragend", function(e){
-            var pos = stage.getPointerPosition();
-            var shape = layer.getIntersection(pos);
-            if (shape) {
-                previousShape.fire('drop', {
-                    type : 'drop',
-                    target : previousShape,
-                    evt : e.evt
-                }, true);
-            }
-            previousShape = undefined;
-            e.target.moveTo(layer);
-            layer.draw();
-            tempLayer.draw();
-        });
-
-
         stage.add(layer);
+
+        var tempLayer = new Konva.Layer();
+        stage.add(tempLayer);
+
+        @include('js.dragOverJS')
       </script>
     </body>
 </html>
