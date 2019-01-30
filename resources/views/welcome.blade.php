@@ -67,83 +67,10 @@
 
         var layer = new Konva.Layer();
 
-        var box = new Konva.Rect({
-            name:'sampleBox',
-            x: 20,
-            y: 20,
-            width: 20,
-            height: 30,
-            stroke: 'gray',
-            strokeWidth: 1,
-            dash: [10, 5]
-        });
+        var ng = 0;
+        var ag = 0;
+        var og = 0;
 
-        // add cursor styling
-        box.on('mouseover', function() {
-            document.body.style.cursor = 'pointer';
-            this.stroke('darkgrey');
-            this.strokeWidth(3);
-            layer.draw();
-        });
-        box.on('mouseout', function() {
-            document.body.style.cursor = 'default';
-            this.stroke('grey');
-            this.strokeWidth(1);
-            layer.draw();
-        });
-        layer.add(box);
-
-        var i=0;
-        box.on('click', function () {
-            i++;
-            var b = new Konva.Rect({
-                name:'newBox'+i,
-                x:100,
-                y:10,
-                width: 40,
-                height: 50,
-                stroke: 'gray',
-                strokeWidth: 1,
-                dash: [10, 5]
-            });
-
-            // add cursor styling
-            b.on('mouseover', function() {
-                document.body.style.cursor = 'grab';
-                this.stroke('darkgrey');
-                this.strokeWidth(3);
-                layer.draw();
-            });
-            b.on('mouseout', function() {
-                document.body.style.cursor = 'default';
-                this.stroke('grey');
-                this.strokeWidth(1);
-                layer.draw();
-            });
-            b.on('mousedown touchstart', function () {
-                document.body.style.cursor = 'grabbing';
-            });
-            b.on('mouseup touchend', function () {
-                document.body.style.cursor = 'grab';
-            });
-
-            var con = new Konva.Line({
-              points: [100+20, 10+50, 100+20, 10+60],
-              stroke: 'darkgrey',
-              strokeWidth: 2
-            });
-
-            var g = new Konva.Group({
-                draggable:true,
-            });
-
-            g.add(b);
-            g.add(con);
-
-            layer.add(g);
-            layer.draw();
-
-        });
         stage.on('click', function(e){
             //alert(choice);
             var mousePos = stage.getPointerPosition();
@@ -151,8 +78,9 @@
             var y = (mousePos.y - (mousePos.y%10)) - 20;
 
             if(choice === 'notGate'){
-                var b = new Konva.Rect({
-                    name:'newBox'+i,
+                ng++;
+                var notgate = new Konva.Rect({
+                    name:'notGate'+ng,
                     x:x,
                     y:y,
                     width: 40,
@@ -164,22 +92,22 @@
                 });
 
                 // add cursor styling
-                b.on('mouseover', function() {
+                notgate.on('mouseover', function() {
                     document.body.style.cursor = 'grab';
                     this.stroke('darkgrey');
                     this.strokeWidth(3);
                     layer.draw();
                 });
-                b.on('mouseout', function() {
+                notgate.on('mouseout', function() {
                     document.body.style.cursor = 'default';
                     this.stroke('grey');
                     this.strokeWidth(1);
                     layer.draw();
                 });
-                b.on('mousedown touchstart', function () {
+                notgate.on('mousedown touchstart', function () {
                     document.body.style.cursor = 'grabbing';
                 });
-                b.on('mouseup touchend', function (e) {
+                notgate.on('mouseup touchend', function () {
                     document.body.style.cursor = 'grab';
                     var newPos = stage.getPointerPosition();
 
@@ -199,7 +127,88 @@
                     });
                 });
 
-                layer.add(b);
+                layer.add(notgate);
+                layer.draw();
+            }
+
+            if(choice === 'andGate'){
+                ag++;
+                var andgate = new Konva.Rect({
+                    name:'andGate'+ag,
+                    x:x,
+                    y:y,
+                    width: 40,
+                    height: 50,
+                    stroke: 'blue',
+                    strokeWidth: 1,
+                    draggable:true,
+                    dash: [10, 5]
+                });
+
+                // add cursor styling
+                andgate.on('mouseover', function() {
+                    document.body.style.cursor = 'grab';
+                    this.stroke('darkblue');
+                    this.strokeWidth(3);
+                    layer.draw();
+                });
+                andgate.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                    this.stroke('blue');
+                    this.strokeWidth(1);
+                    layer.draw();
+                });
+                andgate.on('mousedown touchstart', function () {
+                    document.body.style.cursor = 'grabbing';
+                });
+                andgate.on('mouseup touchend', function () {
+                    document.body.style.cursor = 'grab';
+                    var newPos = stage.getPointerPosition();
+
+                    var newX = (this.getAttr('x') - (this.getAttr('x')%10));
+                    var newY = (this.getAttr('y') - (this.getAttr('y')%10));
+
+                    if(this.getAttr('x')%10 > 5){
+                      var newX = ((this.getAttr('x')+10) - (this.getAttr('x')%10));
+                    }
+                    if(this.getAttr('y')%10 > 5){
+                      var newY = ((this.getAttr('y')+10) - (this.getAttr('y')%10));
+                    }
+
+                    this.setAttrs({
+                      x:newX,
+                      y:newY
+                    });
+                });
+                andgate.on('click', function(){
+                  if(andtr.getAttr('visible') === false){
+                    andtr.setAttrs({
+                      visible:true
+                    })
+                  }
+                  else {
+                    andtr.setAttrs({
+                      visible:false
+                    })
+                  }
+                  layer.draw();
+                })
+                andgate.on('dragstart', function() {
+                  andtr.setAttrs({
+                    visible:false
+                  })
+                  layer.draw();
+                });
+
+                var andtr = new Konva.Transformer({
+                  visible:false,
+                  rotationSnaps: [0, 90, 180, 270],
+                  resizeEnabled: false
+                });
+                layer.add(andtr);
+                andtr.attachTo(andgate);
+
+                layer.add(andgate);
                 layer.draw();
             }
         });
@@ -208,28 +217,6 @@
 
         var tempLayer = new Konva.Layer();
         stage.add(tempLayer);
-
-        stage.on('click tap', function (e) {
-          // if click on empty area - remove all transformers
-          if (e.target === stage) {
-            stage.find('Transformer').destroy();
-            layer.draw();
-            return;
-          }
-          // do nothing if clicked NOT on our rectangles
-          if (!e.target.hasName('newBox1')) {
-            return;
-          }
-          // remove old transformers
-          // TODO: we can skip it if current rect is already selected
-          stage.find('Transformer').destroy();
-
-          // create new transformer
-          var tr = new Konva.Transformer();
-          layer.add(tr);
-          tr.attachTo(e.target);
-          layer.draw();
-        })
 
         @include('js.dragOverJS')
       </script>
