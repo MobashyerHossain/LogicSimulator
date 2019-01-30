@@ -29,10 +29,14 @@
     </head>
 
     <body>
-      <div id="gridbox" style="margin: auto; width: 50%; overflow-y: scroll; height:400px;">
-        <div id="container"></div>
+      <div id="app">
+          <main class="py-4 mt-5">
+            <div id="gridbox" style="margin: auto; width: 50%; overflow-y: scroll; height:400px;">
+              <div id="container"></div>
+            </div>
+          </main>
       </div>
-
+      
       <script>
         var width = document.getElementById('gridbox').offsetWidth*5;
         var height = document.getElementById('gridbox').offsetHeight*5;
@@ -78,13 +82,12 @@
             i++;
             var b = new Konva.Rect({
                 name:'newBox'+i,
-                x: 100,
-                y: 20,
+                x:100,
+                y:10,
                 width: 40,
                 height: 50,
                 stroke: 'gray',
                 strokeWidth: 1,
-                draggable:true,
                 dash: [10, 5]
             });
 
@@ -108,8 +111,22 @@
                 document.body.style.cursor = 'grab';
             });
 
-            layer.add(b);
+            var con = new Konva.Line({
+              points: [100+20, 10+50, 100+20, 10+60],
+              stroke: 'darkgrey',
+              strokeWidth: 2
+            });
+
+            var g = new Konva.Group({
+                draggable:true,
+            });
+
+            g.add(b);
+            g.add(con);
+
+            layer.add(g);
             layer.draw();
+
         });
         stage.add(layer);
 
