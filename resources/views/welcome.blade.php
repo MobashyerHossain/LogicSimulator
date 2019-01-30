@@ -29,17 +29,33 @@
     </head>
 
     <body>
-      <div id="app">
-          <main class="py-4 mt-5">
-            <div id="gridbox" style="margin: auto; width: 50%; overflow-y: scroll; height:400px;">
-              <div id="container"></div>
-            </div>
-          </main>
+      <div class="row ml-5 mr-5">
+        <div class="col-2">
+          <form>
+            <input type="radio" name="choices" id="choices" value="default" checked> Default<br>
+            <input type="radio" name="choices" id="choices" value="notGate"> Not Gate<br>
+            <input type="radio" name="choices" id="choices" value="andGate"> And Gate<br>
+            <input type="radio" name="choices" id="choices" value="orGate"> Or Gate<br>
+          </form>
+        </div>
+        <div class="col-9">
+          <div id="gridbox" style="margin: auto; width: 100%; overflow-y: scroll; height:400px;">
+            <div id="container"></div>
+          </div>
+        </div>
       </div>
-      
+
+
+
       <script>
         var width = document.getElementById('gridbox').offsetWidth*5;
         var height = document.getElementById('gridbox').offsetHeight*5;
+
+        var choice;
+
+        $("input[name=choices]").change(function(){
+            choice = $("#choices:checked").val();
+        });
 
         var stage = new Konva.Stage({
             container: 'container',
@@ -128,10 +144,92 @@
             layer.draw();
 
         });
+        stage.on('click', function(e){
+            //alert(choice);
+            var mousePos = stage.getPointerPosition();
+            var x = (mousePos.x - (mousePos.x%10)) - 20;
+            var y = (mousePos.y - (mousePos.y%10)) - 20;
+
+            if(choice === 'notGate'){
+                var b = new Konva.Rect({
+                    name:'newBox'+i,
+                    x:x,
+                    y:y,
+                    width: 40,
+                    height: 50,
+                    stroke: 'gray',
+                    strokeWidth: 1,
+                    draggable:true,
+                    dash: [10, 5]
+                });
+
+                // add cursor styling
+                b.on('mouseover', function() {
+                    document.body.style.cursor = 'grab';
+                    this.stroke('darkgrey');
+                    this.strokeWidth(3);
+                    layer.draw();
+                });
+                b.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                    this.stroke('grey');
+                    this.strokeWidth(1);
+                    layer.draw();
+                });
+                b.on('mousedown touchstart', function () {
+                    document.body.style.cursor = 'grabbing';
+                });
+                b.on('mouseup touchend', function (e) {
+                    document.body.style.cursor = 'grab';
+                    var newPos = stage.getPointerPosition();
+
+                    var newX = (this.getAttr('x') - (this.getAttr('x')%10));
+                    var newY = (this.getAttr('y') - (this.getAttr('y')%10));
+
+                    if(this.getAttr('x')%10 > 5){
+                      var newX = ((this.getAttr('x')+10) - (this.getAttr('x')%10));
+                    }
+                    if(this.getAttr('y')%10 > 5){
+                      var newY = ((this.getAttr('y')+10) - (this.getAttr('y')%10));
+                    }
+
+                    this.setAttrs({
+                      x:newX,
+                      y:newY
+                    });
+                });
+
+                layer.add(b);
+                layer.draw();
+            }
+        });
+
         stage.add(layer);
 
         var tempLayer = new Konva.Layer();
         stage.add(tempLayer);
+
+        stage.on('click tap', function (e) {
+          // if click on empty area - remove all transformers
+          if (e.target === stage) {
+            stage.find('Transformer').destroy();
+            layer.draw();
+            return;
+          }
+          // do nothing if clicked NOT on our rectangles
+          if (!e.target.hasName('newBox1')) {
+            return;
+          }
+          // remove old transformers
+          // TODO: we can skip it if current rect is already selected
+          stage.find('Transformer').destroy();
+
+          // create new transformer
+          var tr = new Konva.Transformer();
+          layer.add(tr);
+          tr.attachTo(e.target);
+          layer.draw();
+        })
 
         @include('js.dragOverJS')
       </script>
