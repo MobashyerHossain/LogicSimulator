@@ -36,6 +36,7 @@
             <input type="radio" name="choices" id="choices" value="notGate"> Not Gate<br>
             <input type="radio" name="choices" id="choices" value="andGate"> And Gate<br>
             <input type="radio" name="choices" id="choices" value="orGate"> Or Gate<br>
+            <input type="radio" name="choices" id="choices" value="line"> Line<br>
           </form>
         </div>
         <div class="col-9">
@@ -50,7 +51,7 @@
       <script>
         var width = document.getElementById('gridbox').offsetWidth*5;
         var height = document.getElementById('gridbox').offsetHeight*5;
-
+        var linebool = false;
         var choice;
 
         $("input[name=choices]").change(function(){
@@ -70,6 +71,7 @@
         var ng = 0;
         var ag = 0;
         var og = 0;
+        var ln = 0;
 
         stage.on('click', function(e){
             //alert(choice);
@@ -210,6 +212,60 @@
 
                 layer.add(andgate);
                 layer.draw();
+            }
+
+            if(choice === 'line'){
+              if(linebool === false){
+                ln++;
+                var startPos = stage.getPointerPosition();
+                var linestartx = startPos.x;
+                var linestarty = startPos.y;
+                var lineendx = startPos.x;
+                var lineendy = startPos.y;
+
+                var redLine = new Konva.Line({
+                  name: 'line'+ln,
+                  points: [linestartx, linestarty, lineendx, lineendy],
+                  dash: [15, 5],
+                  stroke: 'red',
+                  strokeWidth: 2
+                });
+
+                stage.on('mousemove', function (){
+                  var endPos = stage.getPointerPosition();
+                  var lineendx = endPos.x;
+                  var lineendy = endPos.y;
+
+                  if(linestartx%10 < 5){
+                    linestartx = linestartx - linestartx%10;
+                    linestarty = linestarty - linestarty%10;
+                  }
+                  else{
+                    linestartx = linestartx + (10 - (linestartx%10));
+                    linestarty = linestarty + (10 - (linestarty%10));
+                  }
+                  if(lineendx%10 < 5){
+                    lineendx = lineendx - lineendx%10;
+                    lineendy = lineendy - lineendy%10;
+                  }
+                  else{
+                    lineendx = lineendx + (10 - (lineendx%10));
+                    lineendy = lineendy + (10 - (lineendy%10));
+                  }
+
+                  redLine.setAttrs({
+                    points: [linestartx, linestarty, linestartx, lineendy, lineendx, lineendy]
+                  });
+
+                  layer.add(redLine);
+                  layer.draw();
+                });
+                linebool = true;
+              }
+              else{
+                stage.off('mousemove');
+                linebool = false;
+              }
             }
         });
 
