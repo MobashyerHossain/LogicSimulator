@@ -37,7 +37,9 @@
             <input type="radio" name="choices" id="choices" value="andGate"> And Gate<br>
             <input type="radio" name="choices" id="choices" value="orGate"> Or Gate<br>
             <input type="radio" name="choices" id="choices" value="line"> Line<br>
+            <input type="radio" name="choices" id="choices" value="eraser"> Eraser<br>
           </form>
+          <div id="buttons"><button id="save">Save as Image</button></div>
         </div>
         <div class="col-9">
           <div id="gridbox" style="margin: auto; width: 100%; overflow-y: scroll; height:400px;">
@@ -49,8 +51,8 @@
 
 
       <script>
-        var width = document.getElementById('gridbox').offsetWidth*5;
-        var height = document.getElementById('gridbox').offsetHeight*5;
+        var width = document.getElementById('gridbox').offsetWidth;
+        var height = document.getElementById('gridbox').offsetHeight;
         var linebool = false;
         var choice;
 
@@ -223,12 +225,43 @@
                 var lineendx = startPos.x;
                 var lineendy = startPos.y;
 
-                var redLine = new Konva.Line({
-                  name: 'line'+ln,
+                var wire = new Konva.Line({
+                  name: 'wire'+ln,
                   points: [linestartx, linestarty, lineendx, lineendy],
                   dash: [15, 5],
                   stroke: 'red',
+                  draggable:true,
                   strokeWidth: 2
+                });
+
+
+                wire.on('mouseover', function() {
+                    document.body.style.cursor = 'grab';
+                });
+                wire.on('mouseout', function() {
+                    document.body.style.cursor = 'default';
+                });
+                wire.on('mousedown touchstart', function () {
+                    document.body.style.cursor = 'grabbing';
+                });
+                wire.on('mouseup touchend', function () {
+                  document.body.style.cursor = 'grab';
+                  var newPos = stage.getPointerPosition();
+
+                  var newX = (this.getAttr('x') - (this.getAttr('x')%10));
+                  var newY = (this.getAttr('y') - (this.getAttr('y')%10));
+
+                  if(this.getAttr('x')%10 > 5){
+                    var newX = ((this.getAttr('x')+10) - (this.getAttr('x')%10));
+                  }
+                  if(this.getAttr('y')%10 > 5){
+                    var newY = ((this.getAttr('y')+10) - (this.getAttr('y')%10));
+                  }
+
+                  this.setAttrs({
+                    x:newX,
+                    y:newY
+                  });
                 });
 
                 stage.on('mousemove', function (){
@@ -253,11 +286,11 @@
                     lineendy = lineendy + (10 - (lineendy%10));
                   }
 
-                  redLine.setAttrs({
+                  wire.setAttrs({
                     points: [linestartx, linestarty, linestartx, lineendy, lineendx, lineendy]
                   });
 
-                  layer.add(redLine);
+                  layer.add(wire);
                   layer.draw();
                 });
                 linebool = true;
@@ -275,6 +308,22 @@
         stage.add(tempLayer);
 
         @include('js.dragOverJS')
+
+        function downloadURI(uri, name) {
+          var link = document.createElement('a');
+          link.download = name;
+          link.href = uri;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          delete link;
+        }
+
+        document.getElementById('save').addEventListener('click', function() {
+            var dataURL = stage.toDataURL({ pixelRatio: 3 });
+            downloadURI(dataURL, 'stage.png');
+          }, false
+        );
       </script>
     </body>
 </html>
