@@ -22,6 +22,7 @@
     var width = document.getElementById('gridbox').offsetWidth;
     var height = document.getElementById('gridbox').offsetHeight;
     var choice = 'default';
+    var ng =0;
 
     $(document).on('click', '[name="choices"]', function () {
         choice = $(this).val();
@@ -36,6 +37,34 @@
     @include('js.gridJS')
 
     var drawlayer = new Konva.Layer();
+
+    $(document).on('click', '[name="choices"]', function () {
+        if(choice === 'notGate'){
+          stage.on('click tap', function(){
+            var mousePos = stage.getPointerPosition();
+            var x = (mousePos.x - (mousePos.x%10)) - 10;
+            var y = (mousePos.y - (mousePos.y%10)) - 10;
+            ng++;
+
+            var imageObj = new Image();
+            imageObj.onload = function() {
+              var notgate = new Konva.Image({
+                name: 'notGate'+ng,
+                x: x,
+                y: y,
+                image: imageObj,
+                width: 60,
+                height: 30,
+                draggable: true
+              });
+
+              drawlayer.add(notgate);
+              drawlayer.draw();
+            };
+            imageObj.src = "{{url('storage/images/notGate.png')}}";
+          });
+        }
+    });
     stage.add(drawlayer);
   </script>
 @endsection
