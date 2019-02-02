@@ -29,7 +29,14 @@
     </head>
 
     <body>
-      <div class="row ml-5 mr-5">
+      @include('navbar')
+
+      <main class="py-0 mt-0">
+          @yield('content')
+      </main>
+      
+      @yield('script')
+      <!--<div class="row ml-5 mr-5">
         <div class="col-2">
           <form>
             <input type="radio" name="choices" id="choices" value="default" checked> Default<br>
@@ -324,6 +331,6 @@
             downloadURI(dataURL, 'stage.png');
           }, false
         );
-      </script>
+      </script>-->
     </body>
 </html>
