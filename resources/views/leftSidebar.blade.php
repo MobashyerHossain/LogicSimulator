@@ -11,14 +11,20 @@
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body p-2 ml-3 text-light">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="default" checked>
-          <label class="form-check-label" for="default">
+          <input class="form-check-input default" type="radio" name="choices" id="default" value="default" checked>
+          <label class="form-check-label w-100" for="default">
             default
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="wire">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="delete" value="delete">
+          <label class="form-check-label w-100" for="delete">
+            delete
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="choices" id="wire" value="wire">
+          <label class="form-check-label w-100" for="wire">
             wire
           </label>
         </div>
@@ -33,53 +39,53 @@
         </button>
       </h5>
     </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
       <div class="card-body p-2 ml-3 text-light">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="notGate">
-          <label class="form-check-label" for="default">
+          <input class="form-check-input" type="radio" name="choices" id="notGate" value="notGate">
+          <label class="form-check-label w-100" for="notGate">
             NOT Gate
           </label>
         </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="buffer">
-          <label class="form-check-label" for="wire">
+        <!--<div class="form-check">
+          <input class="form-check-input" type="radio" name="choices" id="buffer" value="buffer">
+          <label class="form-check-label w-100" for="buffer">
             Buffer
           </label>
-        </div>
+        </div>-->
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="andGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="andGate" value="andGate">
+          <label class="form-check-label w-100" for="andGate">
             AND Gate
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="orGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="orGate" value="orGate">
+          <label class="form-check-label w-100" for="orGate">
             OR Gate
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="nandGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="nandGate" value="nandGate">
+          <label class="form-check-label w-100" for="nandGate">
             NAND Gate
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="norGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="norGate" value="norGate">
+          <label class="form-check-label w-100" for="norGate">
             NOR Gate
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="xorGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="xorGate" value="xorGate">
+          <label class="form-check-label w-100" for="xorGate">
             XOR Gate
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="choices" id="choices" value="xnorGate">
-          <label class="form-check-label" for="wire">
+          <input class="form-check-input" type="radio" name="choices" id="xnorGate" value="xnorGate">
+          <label class="form-check-label w-100" for="xnorGate">
             XNOR Gate
           </label>
         </div>
@@ -99,4 +105,5 @@
       </div>
     </div>
   </div>
+  <div id="buttons" class="p-2"><button id="save" class="btn btn-light w-100">Save as Image</button></div>
 </div>

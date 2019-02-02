@@ -34,7 +34,7 @@
       <main class="py-0 mt-0">
           @yield('content')
       </main>
-      
+
       @yield('script')
       <!--<div class="row ml-5 mr-5">
         <div class="col-2">
